@@ -81,22 +81,37 @@ n = 800;
 % limits ...
 mxs = max(max(pts, [],2),[],3);
 mns = min(min(pts, [],2),[],3);
+max_lim = max(mxs - mns);
+
+lim_x = (mns(1)+mxs(1))/2 + max_lim*[-.5 .5];
+lim_y = (mns(2)+mxs(2))/2 + max_lim*[-.5 .5];
+lim_z = (mns(3)+mxs(3))/2 + max_lim*[-.5 .5];
 
 figure;
 
 cx = pts(1,:,1);
 cy = pts(2,:,1);
 cz = pts(3,:,1);
-h = trisurf(tri,cx,cy,cz);
-h.EdgeColor = 'none';
+
+%h_tr = plot3(p(:,1), p(:,2), p(:,3));
+%hold on;
+h_cup = trisurf(tri,cx,cy,cz);
+h_cup.EdgeColor = 'none';
+
+title('Cup Trajectory Simulation');
+grid on;
+xlim(lim_x);
+ylim(lim_y);
+zlim(lim_z);
 
 for i=2:n
-    h.Vertices = squeeze(pts(:,:,i))';
-    xlim([mns(1) mxs(1)]);
-    ylim([mns(2) mxs(2)]);
-    zlim([mns(3) mxs(3)]);
+%     h_tr.XData = p(1:i, 1);
+%     h_tr.YData = p(1:i, 1);
+%     h_tr.ZData = p(1:i, 1);
+    h_cup.Vertices = squeeze(pts(:,:,i))';
     drawnow;
 end
+
 %% odefun
 function dx=delta(~, x, params)
 % unroll parameters
