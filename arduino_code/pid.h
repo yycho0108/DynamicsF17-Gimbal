@@ -42,4 +42,8 @@ class PID {
       t = now;
       return val;
     }
+    void reset(unsigned long t0){
+      t = t0;
+      k_i = k_d = 0.0;
+    }
 };

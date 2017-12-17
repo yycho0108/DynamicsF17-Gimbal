@@ -1,6 +1,8 @@
 #include <quaternionFilters.h>
 #include <MPU9250.h>
 
+#define IMU_LOOP (10)
+
 class IMUManager {
   public:
     MPU9250 imu;
@@ -22,8 +24,29 @@ class IMUManager {
       Serial.print(" I should be "); Serial.println(0x71, HEX);
 
       if (c == 0x71) {
-        imu.MPU9250SelfTest(imu.selfTest);
-        imu.calibrateMPU9250(imu.gyroBias, imu.accelBias);
+        //imu.MPU9250SelfTest(imu.selfTest);
+        //imu.calibrateMPU9250(imu.gyroBias, imu.accelBias);
+        imu.gyroBias[0] = -2.46;
+        imu.gyroBias[1] = -1.73;
+        imu.gyroBias[2] = -0.31;
+
+        imu.accelBias[0] = 0.01;
+        imu.accelBias[1] = 0.00;
+        imu.accelBias[2] = 0.03;
+
+        //        Serial.print(imu.gyroBias[0]);
+        //        Serial.print(',');
+        //        Serial.print(imu.gyroBias[1]);
+        //        Serial.print(',');
+        //        Serial.print(imu.gyroBias[2]);
+        //        Serial.print("||");
+        //
+        //        Serial.print(imu.accelBias[0]);
+        //        Serial.print(',');
+        //        Serial.print(imu.accelBias[1]);
+        //        Serial.print(',');
+        //        Serial.print(imu.accelBias[2]);
+        //        Serial.println(';');
 
         imu.initMPU9250();
 
@@ -101,7 +124,7 @@ class IMUManager {
                                imu.mx, imu.mz, imu.deltat);
 
         imu.delt_t = now - imu.count;
-        if (imu.delt_t > 500) {
+        if (imu.delt_t > IMU_LOOP) {
           /*
              Serial.print("ax = "); Serial.print(9.81 * imu.ax);
              Serial.print(" ay = "); Serial.print(9.81 * imu.ay);
