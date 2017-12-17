@@ -104,14 +104,26 @@ xlim(lim_x);
 ylim(lim_y);
 zlim(lim_z);
 
+
+
 for i=2:n
 %     h_tr.XData = p(1:i, 1);
 %     h_tr.YData = p(1:i, 1);
 %     h_tr.ZData = p(1:i, 1);
     h_cup.Vertices = squeeze(pts(:,:,i))';
     drawnow;
+    thisFrame = getframe(gca);
+    mov(i-1) = thisFrame;
+    i
 end
 
+writerObj = VideoWriter('stabilize.mp4', 'MPEG-4');
+open(writerObj);
+nf = length(mov);
+for i = 1:nf
+    writeVideo(writerObj, mov(i));
+end
+close(writerObj);
 %% odefun
 function dx=delta(~, x, params)
 % unroll parameters
